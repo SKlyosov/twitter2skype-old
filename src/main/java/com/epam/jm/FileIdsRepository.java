@@ -6,8 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
+
+import com.google.common.base.Preconditions;
 
 public class FileIdsRepository implements IIdsRepository{
 
@@ -15,6 +16,7 @@ public class FileIdsRepository implements IIdsRepository{
 	private HashSet<Long> ids;
 	
 	public FileIdsRepository(String fileName) {
+		Preconditions.checkNotNull(fileName, "fileName maust be not null"); 
 		this.fileName = fileName;
 		loadIds();
 	}

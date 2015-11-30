@@ -18,34 +18,23 @@ public class NewsService {
 		PropertyLoader.load();
 	}
 	
-	public static void main(String[] args) {
-	
-		try (FileIdsRepository vkIdsRepository = new FileIdsRepository(args[0]);
-				FileIdsRepository twitterIdsRepository = new FileIdsRepository(args[1])) {
+	public void run() throws Exception {
+
+		try {
 			
-			NewsService newService = new NewsService(new IPublisher[] {new VkReceiver(vkIdsRepository),
-					new TwitterReceiver(twitterIdsRepository)},
-					new ISubscriber[] {new SkypeSender()});
-			
-			newService.run();
-			
+			for (IPublisher publisher : publishers) {
+				
+				String msg;
+				if ((msg = publisher.receive()) != null) {
+					for (ISubscriber subscriber : subscribers) {
+						subscriber.send(msg);
+					}
+				}
+				
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-		}
-		
-	}
-	
-	public void run() throws Exception {
-		
-		for (IPublisher publisher : publishers) {
-			
-			String msg;
-			if ((msg = publisher.receive()) != null) {
-				for (ISubscriber subscriber : subscribers) {
-					subscriber.send(msg);
-				}
-			}
-			
+			throw e;
 		}
 		
 	}
