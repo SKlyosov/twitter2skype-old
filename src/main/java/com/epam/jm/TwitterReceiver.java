@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.base.Preconditions;
+
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -23,10 +25,12 @@ public class TwitterReceiver implements IPublisher {
 	private int curPos;
 	private String twitter_user_id;
 	
-	public TwitterReceiver(IIdsRepository idsRepository) throws TwitterException {
+	public TwitterReceiver(IPropertyLoader propertLoader, IIdsRepository idsRepository) throws TwitterException {
+		Preconditions.checkNotNull(propertLoader, "propertLoader can not be null");
+		Preconditions.checkNotNull(idsRepository, "propertLoader can not be null");
 		this.idsRepository = idsRepository;
         twitter = new TwitterFactory().getInstance();
-        twitter_user_id = PropertyLoader.getProperty("twitter.user");
+        twitter_user_id = propertLoader.getProperty("twitter.user");
         init();
 	}
 	

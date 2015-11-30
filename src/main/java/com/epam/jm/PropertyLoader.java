@@ -9,12 +9,13 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PropertyLoader {
+public class PropertyLoader implements IPropertyLoader {
 	
 	private final static Logger logger = LogManager.getLogger(VkReceiver.class);
-	private static Properties props = new Properties();
+	private Properties props = new Properties();
 	
-	public static void load() throws IOException {
+	@Override
+	public void load() throws IOException {
 		
 		File file = new File("skypetwitter.properties");
 		try (Reader reader = new FileReader(file)) {
@@ -25,7 +26,8 @@ public class PropertyLoader {
 		}
 	}
 
-	public static String getProperty(String key) {
+	@Override
+	public String getProperty(String key) {
 		return props.getProperty(key);
 	}
 

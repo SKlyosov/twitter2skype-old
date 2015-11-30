@@ -3,6 +3,7 @@ package com.epam.jm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.base.Preconditions;
 import com.skype.Chat;
 import com.skype.Skype;
 import com.skype.SkypeException;
@@ -13,8 +14,9 @@ public class SkypeSender implements ISubscriber {
 
 	private Chat chat;
 	
-	public SkypeSender() throws SkypeException {
-		String skypeGroupId = PropertyLoader.getProperty("skype.chat_group_id"); 
+	public SkypeSender(IPropertyLoader propertyLoader) throws SkypeException {
+		Preconditions.checkNotNull(propertyLoader, "idsRepository can not be null");
+		String skypeGroupId = propertyLoader.getProperty("skype.chat_group_id"); 
 		try {
 			chat = Skype.chat(skypeGroupId);
 		} catch (SkypeException e) {
